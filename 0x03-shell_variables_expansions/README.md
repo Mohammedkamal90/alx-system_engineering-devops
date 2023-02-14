@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 On branch master
 Your branch is ahead of 'origin/master' by 1 commit.
   (use "git push" to publish your local commits)
@@ -9,3 +10,6 @@ Changes not staged for commit:
 	modified:   README.md
 
 no changes added to commit (use "git add" and/or "git commit -a")
+=======
+Shell variables expansions
+>>>>>>> bd0844fb0675aa383eb8ed518155baa142786b6f
