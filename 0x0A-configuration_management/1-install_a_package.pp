@@ -1,5 +1,5 @@
 #!/usr/bin/pup
-# 1-install_a_package flask
+# install_a_package flask
 
 package { 'Flask':
   ensure   => '2.1.0',
