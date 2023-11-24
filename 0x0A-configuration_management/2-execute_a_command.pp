@@ -1,6 +1,6 @@
-# 2-execute_a_command.pp
+# Execute_a_command
 
 exec { 'killmenow':
   command => 'pkill -f killmenow',
-  provider => 'shell',
+  provider=> 'shell',
 }
