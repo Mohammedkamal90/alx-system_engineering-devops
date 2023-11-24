@@ -1,6 +1,6 @@
 # Execute_a_command
 
-exec { 'killmenow':
+exec { 'pkill':
   command => 'pkill -f killmenow',
   provider=> 'shell',
 }
