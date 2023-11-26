@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Connect to the server using ssh with the private key ~/.ssh/school and user ubuntu
+
+# The '-i' flag is used to specify the identity file (private key)
+# The '-o' flag is used to set additional options for the SSH connection
+
+ssh -i ~/.ssh/school -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@server01
