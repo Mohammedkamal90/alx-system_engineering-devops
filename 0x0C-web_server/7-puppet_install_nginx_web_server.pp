@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Install Nginx
+class nginx_server{
 package { 'nginx':
   ensure => installed,
 }
@@ -23,7 +24,7 @@ file { '/etc/nginx/sites-enabled/redirect_me':
   ensure => link,
   target => '/etc/nginx/sites-available/redirect_me',
 }
-
+}
 # Restart Nginx to apply the changes
 service { 'nginx':
   ensure => 'running',
