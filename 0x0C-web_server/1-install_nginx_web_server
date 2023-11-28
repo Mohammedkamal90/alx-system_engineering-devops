@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Update package list
+apt-get update
+
+# Install Nginx
+apt-get install -y nginx
+
+# Create basic HTML page with "Hello World!"
+echo "Hello World!" > /var/www/html/index.html
+
+# Start Nginx (non-systemctl)
+/etc/init.d/nginx start
+
+# Ensure Nginx is listening port 80
+netstat -tnl | grep ":80 "
+
+# Check if Nginx is running
+if pgrep -x "nginx" > /dev/null
+then
+    echo "Nginx is running."
+else
+    echo "Error: Nginx is not running."
+    exit 1
+fi
