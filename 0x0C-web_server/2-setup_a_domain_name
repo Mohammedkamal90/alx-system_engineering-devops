@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# After setting up the DNS record, you can check it using dig
+dig example.tech
+
+# Verify the registrar information using the provided URL
+# Replace 'example.tech' with your actual domain
+https://whois.whoisxmlapi.com/lookup?apiKey=YOUR_API_KEY&domainName=example.tech
