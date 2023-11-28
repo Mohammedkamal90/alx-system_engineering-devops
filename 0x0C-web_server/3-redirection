@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Create a configuration file for the redirection
+echo "location /redirect_me {" > /etc/nginx/sites-available/redirect_me
+echo "    return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;" >> /etc/nginx/sites-available/redirect_me
+echo "}" >> /etc/nginx/sites-available/redirect_me
+
+# Create a symbolic link to enable the new site
+ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
+
+# Restart Nginx to apply the changes
+/etc/init.d/nginx restart
