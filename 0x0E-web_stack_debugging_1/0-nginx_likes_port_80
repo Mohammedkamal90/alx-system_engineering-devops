@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Update Nginx configuration to listen on port 80
+
+# Check if Nginx is installed
+if ! command -v nginx &> /dev/null; then
+    echo "Nginx is not installed. Please install Nginx and try again."
+    exit 1
+fi
+
+# Backup the original Nginx configuration file
+cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
+
+# Use sed to replace the default configuration and listen on port 80
+sed -i 's/\blisten 80;/listen 80 default_server;/g' /etc/nginx/nginx.conf
+
+# Restart Nginx to apply changes
+service nginx restart
+
+# Print success message
+echo "Nginx is now configured to listen on port 80."
