@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Install Nginx if not already installed
+sudo apt-get update
+sudo apt-get install -y nginx
+
+# Get the server's hostname
+hostname=$(hostname)
+
+# Configure Nginx with the custom header
+sudo sed -i '/server_name _;/a \\n    add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
+
+# Restart Nginx to apply changes
+sudo service nginx restart
