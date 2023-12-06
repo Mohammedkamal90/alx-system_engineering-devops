@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Update the system
+sudo apt-get update
+sudo apt-get upgrade -y
+
+# Install HAProxy
+sudo apt-get install -y haproxy
+
+# Configure HAProxy
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOL
+frontend lb-frontend
+    bind *:80
+    mode http
+    default_backend lb-backend
+
+backend lb-backend
+    mode http
+    balance roundrobin
+    server web-01 [STUDENT_ID]-web-01:80 check
+    server web-02 [STUDENT_ID]-web-02:80 check
+EOL
+
+# Restart HAProxy
+sudo systemctl restart haproxy
