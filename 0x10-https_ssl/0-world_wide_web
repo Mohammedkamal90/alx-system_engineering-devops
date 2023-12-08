@@ -1,30 +1,44 @@
 #!/usr/bin/env bash
 # Function to display information about a subdomain
-display_info() {
-    domain="$1"
-    subdomain="$2"
-
-    # Use dig to get information about the subdomain
-    result=$(dig "$subdomain.$domain" | grep -A1 'ANSWER SECTION:')
-
-    # Extract record type and destination from the result using awk
-    record_type=$(echo "$result" | awk '/IN/ {print $4}')
-    destination=$(echo "$result" | awk '/IN/ {print $5}')
-
-    # Display the information
-    echo "The subdomain $subdomain is a $record_type record and points to $destination"
+display_usage() {
+    echo "Usage: $0 <domain> [subdomain]"
+    echo "Example: $0 holberton.online"
+    echo "         $0 holberton.online web-01"
 }
 
-# Main script
-domain="$1"
-subdomain="$2"
+# Function to perform DNS lookup and display information
+check_subdomain() {
+    subdomain=$1
+    domain=$2
+    record_type="A"
+    
+    # Perform DNS lookup and extract relevant information
+    result=$(dig +short $subdomain.$domain)
+    
+    # Check if the result is empty
+    if [ -z "$result" ]; then
+        echo "The subdomain $subdomain is not configured for $domain"
+    else
+        echo "The subdomain $subdomain is a $record_type record and points to $result"
+    fi
+}
 
-# Display information for the specified subdomain or default subdomains
-if [ -z "$subdomain" ]; then
-    display_info "$domain" "www"
-    display_info "$domain" "lb-01"
-    display_info "$domain" "web-01"
-    display_info "$domain" "web-02"
+# Check the number of arguments
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    display_usage
+    exit 1
+fi
+
+# Assign values to variables
+domain=$1
+subdomains=("www" "lb-01" "web-01" "web-02")
+
+# Display information for specified subdomain or all subdomains
+if [ $# -eq 1 ]; then
+    for subdomain in "${subdomains[@]}"; do
+        check_subdomain $subdomain $domain
+    done
 else
-    display_info "$domain" "$subdomain"
+    subdomain=$2
+    check_subdomain $subdomain $domain
 fi
