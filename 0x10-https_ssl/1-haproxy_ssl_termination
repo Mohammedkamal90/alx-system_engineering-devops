@@ -47,5 +47,5 @@ frontend https_front
 backend holberton_backend
     balance roundrobin
     mode http
-    server web-01 10.0.0.1:80 check
-    server web-02 10.0.0.2:80 check
+    server web-01 100.25.182.152:80 check
+    server web-02 18.204.7.167:80 check
