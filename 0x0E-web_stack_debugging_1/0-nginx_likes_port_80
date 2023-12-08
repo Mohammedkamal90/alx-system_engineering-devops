@@ -16,6 +16,3 @@ sed -i 's/\blisten 80;/listen 80 default_server;/g' /etc/nginx/nginx.conf
 
 # Restart Nginx to apply changes
 service nginx restart
-
-# Print success message
-echo "Nginx is now configured to listen on port 80."
