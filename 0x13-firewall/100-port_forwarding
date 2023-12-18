@@ -1,0 +1,21 @@
+#!/bin/bash
+# Configure ufw to forward port 8080 to port 80
+
+# Delete existing ufw rules
+ufw --force reset
+
+# Set default policies
+ufw default deny incoming
+ufw default allow outgoing
+
+# Allow SSH
+ufw allow 22/tcp
+
+# Allow Nginx on port 80
+ufw allow 80/tcp
+
+# Allow Nginx on port 8080 and enable port forwarding
+ufw route allow 8080/tcp
+
+# Enable ufw
+ufw --force enable
