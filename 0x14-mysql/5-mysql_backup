@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <mysql_password>"
+    exit 1
+fi
+
+# MySQL dump file name
+dump_file="backup.sql"
+
+# Compression archive name format: day-month-year.tar.gz
+archive_name="$(date +'%d-%m-%Y').tar.gz"
+
+# MySQL user and password
+mysql_user="root"
+mysql_password="$1"
+
+# Perform MySQL dump
+mysqldump -u "$mysql_user" -p"$mysql_password" --all-databases > "$dump_file"
+
+# Check if the dump was successful
+if [ "$?" -ne 0 ]; then
+    echo "MySQL dump failed. Exiting."
+    exit 1
+fi
+
+# Create a compressed archive
+tar -czf "$archive_name" "$dump_file"
+
+# Remove the original dump file
+rm "$dump_file"
+
+# Print the created archive name
+echo "$archive_name created successfully."
