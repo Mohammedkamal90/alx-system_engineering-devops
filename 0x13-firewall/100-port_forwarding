@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Configure ufw to forward port 8080 to port 80
 
 # Delete existing ufw rules
