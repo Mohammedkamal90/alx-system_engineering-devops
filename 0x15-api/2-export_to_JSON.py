@@ -8,7 +8,8 @@ import sys
 
 
 def get_user_data(employee_id):
-    url_for_users = 'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id)
+    url_for_users = 'https://jsonplaceholder.typicode.com/users/{}'
+        .format(employee_id)
     response = requests.get(url_for_users)
 
     if response.status_code != 200:
@@ -37,7 +38,8 @@ def export_to_json(user_id, username, todo_data):
     for todo in todo_data:
         task_title = todo.get('title')
         task_completed_status = todo.get('completed')
-        json_data[str(user_id)].append({"task": task_title, "completed": task_completed_status, "username": username})
+        json_data[str(user_id)].append({"task": task_title,
+            "completed": task_completed_status, "username": username})
 
     with open(filename, 'w+') as json_file:
         json.dump(json_data, json_file)
