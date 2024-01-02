@@ -53,8 +53,7 @@ if __name__ == '__main__':
             user_name = user_data.get('name')
 
             todos_data = get_todo_data()
-            todos = list\
-                    (filter(lambda x: x.get('userId')== employee_id, todos_data))
+            todos = list\n(filter(lambda x: x.get('userId')== employee_id, todos_data))
 
             todos_done = list(filter(lambda x: x.get('completed'), todos))
 
