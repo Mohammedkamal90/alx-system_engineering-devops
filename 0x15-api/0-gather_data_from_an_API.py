@@ -1,33 +1,59 @@
 #!/usr/bin/python3
 """
-Return information for a given employee about his/her TODO list progress
+Using https://jsonplaceholder.typicode.com
+returns info about employee TODO progress
+Implemented using recursion
 """
+import re
 import requests
 import sys
 
+API = "https://jsonplaceholder.typicode.com"
+"""REST API url"""
 
-if __name__ == "__main__":
 
-    DONE_TASKS = 0
-    ALL_TASKS = 0
+def get_user_data(employee_id):
+    user_res = requests.get('{}/users/{}'.format(API, employee_id))
+    user_data = user_res.json()
 
-    URL_FOR_USERS = 'https://jsonplaceholder.typicode.com/users/{0}'.\
-        format(sys.argv[1])
-    URL_FOR_TODOS = 'https://jsonplaceholder.typicode.com/todos'
-    r_for_users = requests.get(URL_FOR_USERS)
-    r_for_todos = requests.get(URL_FOR_TODOS)
+    if user_res.status_code != 200:
+        print("Error: Unable to fetch user data")
+        sys.exit(1)
 
-    name = r_for_users.json().get('name')
-    todos = r_for_todos.json()
-    for todo in todos:
-        if todo.get('userId') == int(sys.argv[1]):
-            ALL_TASKS += 1
-        if (todo.get('userId') == int(sys.argv[1]))\
-                and (todo.get('completed')):
-            DONE_TASKS += 1
-    print("Employee {} is done with tasks({}/{}):".
-          format(name, DONE_TASKS, ALL_TASKS))
-    for todo in todos:
-        if (todo.get('userId') == int(sys.argv[1]))\
-                and (todo.get('completed')):
-            print("	 {}".format(todo.get('title')))
+    return user_data
+
+
+def get_todo_data():
+    todos_res = requests.get('{}/todos'.format(API))
+    todos_data = todos_res.json()
+
+    if todos_res.status_code != 200:
+        print("Error: Unable to fetch TODO list data")
+        sys.exit(1)
+
+    return todos_data
+
+
+def print_todo_progress(user_name, todos_done, total_todos):
+    print(
+        'Employee {} is done with tasks({}/{}):'.format(
+            user_name, len(todos_done), total_todos
+        )
+    )
+    for todo_done in todos_done:
+        print('\t {}'.format(todo_done.get('title')))
+
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        if re.fullmatch(r'\d+', sys.argv[1]):
+            employee_id = int(sys.argv[1])
+
+            user_data = get_user_data(employee_id)
+            user_name = user_data.get('name')
+
+            todos_data = get_todo_data()
+            todos = list(filter(lambda x: x.get('userId') == employee_id, todos_data))
+            todos_done = list(filter(lambda x: x.get('completed'), todos))
+
+            print_todo_progress(user_name, todos_done, len(todos))
