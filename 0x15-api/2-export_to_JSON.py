@@ -6,8 +6,10 @@ import json
 import requests
 import sys
 
+
 def get_user_data(employee_id):
-    url_for_users = 'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id)
+    url_for_users = 'https://jsonplaceholder.typicode.com/users/{}'
+    .format(employee_id)
     response = requests.get(url_for_users)
 
     if response.status_code != 200:
