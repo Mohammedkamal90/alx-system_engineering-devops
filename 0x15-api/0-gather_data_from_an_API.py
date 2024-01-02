@@ -1,48 +1,46 @@
 #!/usr/bin/python3
 """
-Python script that, using this REST API, for a given employee ID,
-returns information about his/her TODO list progress.
+Return information for a given employee about his/her TODO list progress
 """
-
 import requests
-from sys import argv
+import sys
+
+def get_user_data(employee_id):
+    url_for_users = 'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id)
+    response = requests.get(url_for_users)
+
+    if response.status_code != 200:
+        print("Error: Unable to fetch user data")
+        sys.exit(1)
+
+    return response.json()
+
+def get_todo_data(employee_id):
+    url_for_todos = 'https://jsonplaceholder.typicode.com/todos'
+    response = requests.get(url_for_todos)
+
+    if response.status_code != 200:
+        print("Error: Unable to fetch TODO list data")
+        sys.exit(1)
+
+    todos = response.json()
+    return [todo for todo in todos if todo.get('userId') == employee_id]
 
 if __name__ == "__main__":
-    if len(argv) != 2 or not argv[1].isdigit():
-        print("Usage: {} <employee_id>".format(argv[0]))
-        exit(1)
+    if len(sys.argv) != 2 or not sys.argv[1].isdigit():
+        print("Usage: {} <employee_id>".format(sys.argv[0]))
+        sys.exit(1)
 
-    employee_id = int(argv[1])
+    employee_id = int(sys.argv[1])
 
-    # API endpoints
-    user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id)
-    todos_url = 'https://jsonplaceholder.typicode.com/todos?userId={}'.format(employee_id)
+    user_data = get_user_data(employee_id)
+    todo_data = get_todo_data(employee_id)
 
-    # Fetching user data
-    user_response = requests.get(user_url)
-    todos_response = requests.get(todos_url)
+    done_tasks = sum(1 for todo in todo_data if todo.get('completed'))
+    total_tasks = len(todo_data)
 
-    # Check if the requests were successful
-    if user_response.status_code != 200:
-        print("Error: Unable to fetch user data")
-        exit(1)
+    print("Employee {} is done with tasks({}/{}):".format(user_data.get('name'), done_tasks, total_tasks))
 
-    if todos_response.status_code != 200:
-        print("Error: Unable to fetch TODO list data")
-        exit(1)
-
-    # Parse user data
-    user_data = user_response.json()
-    employee_name = user_data.get('name')
-
-    # Parse TODO list data
-    todos_data = todos_response.json()
-    total_tasks = len(todos_data)
-    completed_tasks = [task for task in todos_data if task.get('completed')]
-
-    # Displaying employee TODO list progress
-    print("Employee {} is done with tasks({}/{}):".format(employee_name, len(completed_tasks), total_tasks))
-
-    for task in completed_tasks:
-        print("\t {}".format(task.get('title')))
-
+    for todo in todo_data:
+        if todo.get('completed'):
+            print("\t{}".format(todo.get('title')))
