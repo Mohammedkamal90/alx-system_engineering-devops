@@ -17,6 +17,7 @@ def get_user_data(employee_id):
 
     return response.json()
 
+
 def get_todo_data():
     url_for_todos = 'https://jsonplaceholder.typicode.com/todos'
     response = requests.get(url_for_todos)
@@ -26,6 +27,7 @@ def get_todo_data():
         sys.exit(1)
 
     return response.json()
+
 
 def export_to_json(user_id, username, todo_data):
     filename = '{}.json'.format(user_id)
@@ -41,6 +43,7 @@ def export_to_json(user_id, username, todo_data):
         json.dump(json_data, json_file)
 
     print("Data exported to {}".format(filename))
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 or not sys.argv[1].isdigit():
